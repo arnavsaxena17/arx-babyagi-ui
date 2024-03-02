@@ -1,16 +1,5 @@
 import { AgentMessage } from '@/types';
-import {
-  TextCompletion,
-  WebLoader,
-  WebSearch,
-  YoutubeSearch,
-  CodeReader,
-  CodeReviewer,
-  CodeWriter,
-  DirectoryStructure,
-  SkillSaver,
-  AirtableSaver,
-} from '../skills';
+import { TextCompletion, WebLoader, WebSearch, YoutubeSearch, CodeReader, CodeReviewer, CodeWriter, DirectoryStructure, SkillSaver, AirtableSaver } from '../skills';
 import { Skill } from '../skills/skill';
 
 export class SkillRegistry {

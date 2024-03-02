@@ -19,86 +19,48 @@ export const setupMessage = (
   id?: number,
 ): Message => {
   const defaultIcon =
-    type === 'objective'
-      ? '🎯'
-      : type === 'task-list'
-      ? '📝'
-      : type === 'next-task' && tool === 'web-search'
-      ? '🔍'
-      : type === 'next-task' && tool === 'web-scrape'
-      ? '📄'
-      : type === 'next-task' && tool === 'text-completion'
-      ? '🤖'
-      : type === 'next-task' && tool === 'user-input'
-      ? '🧑‍💻'
-      : type === 'next-task'
-      ? '👉'
-      : type === 'task-result' && tool === 'web-search'
-      ? '🔍'
-      : type === 'task-result' && tool === 'web-scrape'
-      ? '📄'
-      : type === 'task-result' && tool === 'text-completion'
-      ? '🤖'
-      : type === 'task-result'
-      ? '✅'
-      : type === 'task-result-summary'
-      ? '📋'
-      : type === 'search-logs'
-      ? '🌐'
-      : type === 'loading'
-      ? '⏳'
-      : type === 'end-of-iterations'
-      ? '🏁'
-      : type === 'session-summary'
-      ? '📑'
-      : type === 'done'
-      ? '✅'
-      : type === 'complete'
-      ? '🏁'
-      : // : type === 'task-output' && tool === 'web-search'
-      // ? '🔍'
-      // : type === 'task-output' && tool === 'web-scrape'
-      // ? '📄'
-      // : type === 'task-output' && tool === 'text-completion'
-      // ? '🤖'
-      // : type === 'task-output' && tool === 'user-input'
+    type === 'objective' ? '🎯' : type === 'task-list'
+      ? '📝' : type === 'next-task' && tool === 'web-search'
+      ? '🔍' : type === 'next-task' && tool === 'web-scrape'
+      ? '📄' : type === 'next-task' && tool === 'text-completion'
+      ? '🤖' : type === 'next-task' && tool === 'user-input'
+      ? '🧑‍💻' : type === 'next-task'
+      ? '👉' : type === 'task-result' && tool === 'web-search'
+      ? '🔍' : type === 'task-result' && tool === 'web-scrape'
+      ? '📄' : type === 'task-result' && tool === 'text-completion'
+      ? '🤖' : type === 'task-result'
+      ? '✅' : type === 'task-result-summary'
+      ? '📋' : type === 'search-logs'
+      ? '🌐' : type === 'loading'
+      ? '⏳' : type === 'end-of-iterations'
+      ? '🏁' : type === 'session-summary'
+      ? '📑' : type === 'done'
+      ? '✅' : type === 'complete'
+      ? '🏁' : // : type === 'task-output' && tool === 'web-search'
+      // ? '🔍' // : type === 'task-output' && tool === 'web-scrape'
+      // ? '📄' // : type === 'task-output' && tool === 'text-completion'
+      // ? '🤖' // : type === 'task-output' && tool === 'user-input'
       // ? '🧑‍💻'
       type === 'task-output'
-      ? '✅'
-      : type === 'failed'
-      ? '❌'
-      : type === 'user-input'
-      ? '🧑‍💻'
-      : '🤖';
+      ? '✅' : type === 'failed'
+      ? '❌' : type === 'user-input'
+      ? '🧑‍💻' : '🤖';
 
   const title =
     type === 'objective'
-      ? translate('OBJECTIVE', 'message')
-      : type === 'task-list'
-      ? translate('TASK_LIST', 'message')
-      : type === 'next-task'
-      ? translate('NEXT_TASK', 'message')
-      : type === 'task-result'
-      ? translate('TASK_RESULT', 'message')
-      : type === 'task-output'
-      ? translate('TASK_OUTPUT', 'message')
-      : type === 'task-result-summary'
-      ? translate('TASK_RESULT_SUMMARY', 'message')
-      : type === 'loading'
-      ? translate('LOADING', 'message')
-      : type === 'end-of-iterations'
-      ? translate('END_OF_ITERATIONS', 'message')
-      : type === 'session-summary'
-      ? translate('SESSION_SUMMARY', 'message')
-      : type === 'search-logs'
-      ? translate('SEARCH_LOGS', 'message')
-      : type === 'done'
-      ? translate('DONE', 'message')
-      : type === 'complete'
-      ? translate('FINISHED', 'message')
-      : type === 'failed'
-      ? translate('TASK_FAILED', 'message')
-      : '';
+      ? translate('OBJECTIVE', 'message') : type === 'task-list'
+      ? translate('TASK_LIST', 'message') : type === 'next-task'
+      ? translate('NEXT_TASK', 'message') : type === 'task-result'
+      ? translate('TASK_RESULT', 'message') : type === 'task-output'
+      ? translate('TASK_OUTPUT', 'message') : type === 'task-result-summary'
+      ? translate('TASK_RESULT_SUMMARY', 'message') : type === 'loading'
+      ? translate('LOADING', 'message') : type === 'end-of-iterations'
+      ? translate('END_OF_ITERATIONS', 'message') : type === 'session-summary'
+      ? translate('SESSION_SUMMARY', 'message') : type === 'search-logs'
+      ? translate('SEARCH_LOGS', 'message') : type === 'done'
+      ? translate('DONE', 'message') : type === 'complete'
+      ? translate('FINISHED', 'message') : type === 'failed'
+      ? translate('TASK_FAILED', 'message') : '';
 
   const bgColor =
     type === 'loading'
@@ -157,26 +119,16 @@ export const getMessageText = (message: Message): string => {
 export const loadingAgentMessage = (status: AgentStatus) => {
   let text =
     status.type === 'creating' || status.type === 'creating-stream'
-      ? translate('CREATING', 'message')
-      : status.type === 'executing' || status.type === 'executing-stream'
-      ? translate('EXECUTING', 'message')
-      : status.type === 'prioritizing'
-      ? translate('PRIORITIZING', 'message')
-      : status.type === 'saving'
-      ? translate('SAVING', 'message')
-      : status.type === 'preparing'
-      ? translate('PREPARING', 'message')
-      : status.type === 'terminating'
-      ? translate('TERMINATING', 'message')
-      : status.type === 'updating'
-      ? translate('UPDATING', 'message')
-      : status.type === 'summarizing'
-      ? translate('SUMMARIZING', 'message')
-      : status.type === 'managing'
-      ? translate('MANAGING', 'message')
-      : status.type === 'user-input'
-      ? translate('USER_INPUT_WAITING', 'message')
-      : translate('THINKING', 'message');
+      ? translate('CREATING', 'message') : status.type === 'executing' || status.type === 'executing-stream'
+      ? translate('EXECUTING', 'message') : status.type === 'prioritizing'
+      ? translate('PRIORITIZING', 'message') : status.type === 'saving'
+      ? translate('SAVING', 'message') : status.type === 'preparing'
+      ? translate('PREPARING', 'message') : status.type === 'terminating'
+      ? translate('TERMINATING', 'message') : status.type === 'updating'
+      ? translate('UPDATING', 'message') : status.type === 'summarizing'
+      ? translate('SUMMARIZING', 'message') : status.type === 'managing'
+      ? translate('MANAGING', 'message') : status.type === 'user-input'
+      ? translate('USER_INPUT_WAITING', 'message') : translate('THINKING', 'message');
 
   let title = undefined;
   if (status.type === 'creating-stream' || status.type === 'executing-stream') {
@@ -213,6 +165,9 @@ export const getToolIcon = (tool: ToolType) => {
 };
 
 export const getExportText = (messages: Message[], agentId?: string) => {
+  console.log("Agent ID:", agentId);
+  console.log("messages:", messages);
+  
   if (agentId === 'babydeeragi' || agentId === 'babyelfagi') {
     // exclude task-execute & user-input messages
     messages = messages.filter(
@@ -254,6 +209,9 @@ export const getMessageBlocks = (
   messages: Message[],
   isExecutiong: boolean,
 ) => {
+  console.log("Message blocks::", messages);
+  console.log("Message isExecutiong::", isExecutiong);
+  
   const messageBlocks: MessageBlock[] = [];
 
   let currentMessageBlock: MessageBlock | null = null;

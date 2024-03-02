@@ -15,6 +15,8 @@ function Home() {
 
   useEffect(() => {
     const item = localStorage.getItem(STATE_KEY);
+    console.log("Item:", item);
+    
     let show = false;
     if (!item) {
       if (window.innerWidth <= 768) {
@@ -46,7 +48,7 @@ function Home() {
   return (
     <>
       <Head>
-        <title>BabyAGI-UI</title>
+        <title>ArxAGI-UI</title>
         <meta
           name="description"
           content="BabyAGI UI is designed to make it easier to run and develop with babyagi in a web app, like a ChatGPT."
@@ -100,7 +102,7 @@ export const getStaticProps: GetStaticProps = async ({ locale = 'en' }) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(
+      ...(await serverSideTranslations (
         chosenLocale,
         nextI18NextConfig.ns as string[],
       )),

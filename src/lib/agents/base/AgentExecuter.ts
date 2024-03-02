@@ -56,6 +56,9 @@ export class AgentExecuter {
 
   // prepare() is called before loop()
   async prepare() {
+    console.log("Got to preparea::");
+    console.log("Got to preparea this objective::", this.objective);
+    
     this.printer.printObjective(this.objective);
 
     // Start ping loop to keep the connection alive
@@ -67,7 +70,9 @@ export class AgentExecuter {
       }
     }, 10000);
   }
-  async loop() {}
+  async loop() {
+    console.log("loop is blank!!??")
+  }
 
   async finishup() {
     if (this.signal?.aborted) return;

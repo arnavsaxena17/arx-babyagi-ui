@@ -7,6 +7,11 @@ export const EXAMPLES_KEY = 'BABYAGIUI_EXAMPLES';
 
 export const MODELS = [
   {
+    id: 'gpt-3.5-turbo',
+    name: 'OpenAI GPT-3.5 Turbo',
+    icon: 'openai-logo.svg',
+  },
+  {
     id: 'gpt-4-1106-preview',
     name: 'OpenAI GPT-4 Turbo',
     icon: 'openai-logo.svg',
@@ -15,11 +20,6 @@ export const MODELS = [
   {
     id: 'gpt-4',
     name: 'OpenAI GPT-4',
-    icon: 'openai-logo.svg',
-  },
-  {
-    id: 'gpt-3.5-turbo',
-    name: 'OpenAI GPT-3.5 Turbo',
     icon: 'openai-logo.svg',
   },
 ];

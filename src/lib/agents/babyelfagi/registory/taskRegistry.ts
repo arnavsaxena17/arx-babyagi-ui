@@ -27,17 +27,8 @@ export class TaskRegistry {
     this.signal = signal;
   }
 
-  async createTaskList(
-    id: string,
-    objective: string,
-    skillDescriptions: string,
-    modelName: string = 'gpt-3.5-turbo',
-    handleMessage: (message: AgentMessage) => Promise<void>,
-  ): Promise<void> {
-    const relevantObjective = await findMostRelevantObjective(
-      objective,
-      this.userApiKey,
-    );
+  async createTaskList( id: string, objective: string, skillDescriptions: string, modelName: string = 'gpt-3.5-turbo', handleMessage: (message: AgentMessage) => Promise<void>, ): Promise<void> {
+    const relevantObjective = await findMostRelevantObjective( objective, this.userApiKey );
     if (!relevantObjective) {
       console.error('No relevant objective found');
       return;
@@ -60,10 +51,16 @@ export class TaskRegistry {
     TASK LIST=${JSON.stringify(exampleTaskList)}
     OBJECTIVE=${objective}
     TASK LIST=`;
-    const systemPrompt = 'You are a task creation AI.';
-    const systemMessage = new SystemChatMessage(systemPrompt);
-    const messages = new HumanChatMessage(prompt);
 
+    console.log("Prompt to createTaskList:::", prompt);
+    
+    const systemPrompt = 'You are a task creation AI.';
+    
+    const systemMessage = new SystemChatMessage(systemPrompt);
+    console.log("This is system message:", systemMessage);
+    const messages = new HumanChatMessage(prompt);
+    console.log("These are messages from humanchatmessages", messages);
+    
     let result = '';
     const model = new ChatOpenAI(
       {
@@ -92,10 +89,15 @@ export class TaskRegistry {
       },
       { baseOptions: { signal: this.signal } },
     );
-
+      console.log("calling model with systemMessage:",systemMessage);
+      console.log("calling model with messages:",messages);
+      
     try {
       const response = await model.call([systemMessage, messages]);
+      console.log("response::", response);
+      
       result = response.text;
+      console.log("result::", result);
       // markdown is now appended (remove when langchain supports json mode)
       if (result.startsWith('```json')) {
         result = result.slice(7);
@@ -116,6 +118,8 @@ export class TaskRegistry {
     }
 
     this.tasks = parseTasks(result);
+    console.log("These are tasks:", this.tasks);
+    
   }
 
   async executeTask(
@@ -131,12 +135,7 @@ export class TaskRegistry {
       ? task.dependentTaskIds.map((id) => taskOutputs[id].output).join('\n')
       : '';
 
-    return await skill.execute(
-      task,
-      dependentTaskOutputs,
-      objective,
-      modelName,
-    );
+    return await skill.execute( task, dependentTaskOutputs, objective, modelName );
   }
 
   getTasks(): AgentTask[] {
@@ -167,12 +166,7 @@ export class TaskRegistry {
     this.tasks.sort((a, b) => a.id - b.id);
   }
 
-  async reflectOnOutput(
-    objective: string,
-    taskOutput: string,
-    skillDescriptions: string,
-    modelName: string = 'gpt-4-1106-preview',
-  ): Promise<[AgentTask[], number[], AgentTask[]]> {
+  async reflectOnOutput( objective: string, taskOutput: string, skillDescriptions: string, modelName: string = 'gpt-4-1106-preview', ): Promise<[AgentTask[], number[], AgentTask[]]> {
     const example = [
       [
         {
@@ -206,31 +200,29 @@ export class TaskRegistry {
     ];
 
     const prompt = `You are an expert task manager, review the task output to decide at least one new task to add.
-  As you add a new task, see if there are any tasks that need to be updated (such as updating dependencies).
-  Use the current task list as reference. 
-  considering the ultimate objective of your team: ${objective}. 
-  Do not add duplicate tasks to those in the current task list.
-  Only provide JSON as your response without further comments.
-  Every new and updated task must include all variables, even they are empty array.
-  Dependent IDs must be smaller than the ID of the task.
-  New tasks IDs should be no larger than the last task ID.
-  Always select at least one skill.
-  Task IDs should be unique and in chronological order.
-  Do not change the status of complete tasks.
-  Only add skills from the AVAILABLE SKILLS, using the exact same spelling.
-  Provide your array as a JSON array with double quotes. The first object is new tasks to add as a JSON array, the second array lists the ID numbers where the new tasks should be added after (number of ID numbers matches array), The number of elements in the first and second arrays will always be the same. 
-  And the third array provides the tasks that need to be updated.
-  Make sure to keep dependent_task_ids key, even if an empty array.
-  OBJECIVE: ${objective}.
-  AVAILABLE SKILLS: ${skillDescriptions}.
-  Here is the last task output: ${taskOutput}
-  Here is the current task list: ${JSON.stringify(this.tasks)}
-  EXAMPLE OUTPUT FORMAT = ${JSON.stringify(example)}
-  OUTPUT = `;
-
-    console.log(
-      '\nReflecting on task output to generate new tasks if necessary...\n',
-    );
+    As you add a new task, see if there are any tasks that need to be updated (such as updating dependencies).
+    Use the current task list as reference. 
+    considering the ultimate objective of your team: ${objective}. 
+    Do not add duplicate tasks to those in the current task list.
+    Only provide JSON as your response without further comments.
+    Every new and updated task must include all variables, even they are empty array.
+    Dependent IDs must be smaller than the ID of the task.
+    New tasks IDs should be no larger than the last task ID.
+    Always select at least one skill.
+    Task IDs should be unique and in chronological order.
+    Do not change the status of complete tasks.
+    Only add skills from the AVAILABLE SKILLS, using the exact same spelling.
+    Provide your array as a JSON array with double quotes. The first object is new tasks to add as a JSON array, the second array lists the ID numbers where the new tasks should be added after (number of ID numbers matches array), The number of elements in the first and second arrays will always be the same. 
+    And the third array provides the tasks that need to be updated.
+    Make sure to keep dependent_task_ids key, even if an empty array.
+    OBJECIVE: ${objective}.
+    AVAILABLE SKILLS: ${skillDescriptions}.
+    Here is the last task output: ${taskOutput}
+    Here is the current task list: ${JSON.stringify(this.tasks)}
+    EXAMPLE OUTPUT FORMAT = ${JSON.stringify(example)}
+    OUTPUT = `;
+    console.log("New Prompt to reflectOnOutput::", prompt);
+    console.log('\nReflecting on task output to generate new tasks if necessary...\n');
 
     const model = new ChatOpenAI({
       openAIApiKey: this.userApiKey,
@@ -262,7 +254,7 @@ export class TaskRegistry {
     } else {
       throw new Error('Invalid task list structure in the output');
     }
-
+    
     return [[], [], []];
   }
 }

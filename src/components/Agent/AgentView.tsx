@@ -5,12 +5,7 @@ import { AgentInput } from './AgentInput';
 import { AgentParameter } from './AgentParameter';
 import { ProjectTile } from './ProjectTile';
 import { AgentMessageHeader } from './AgentMessageHeader';
-import {
-  getExportAgentMessage,
-  getAgentLoadingMessage,
-  groupMessages,
-  convertToAgentMessages,
-} from '../../utils/message';
+import { getExportAgentMessage, getAgentLoadingMessage, groupMessages, convertToAgentMessages } from '@/utils/message';
 import { AGENT, ITERATIONS, MODELS } from '@/utils/constants';
 import { translate } from '@/utils/translate';
 import { useTranslation } from 'next-i18next';
@@ -18,20 +13,7 @@ import { IntroGuide } from './IntroGuide';
 import { SkillsList } from './SkillList';
 import { AgentBlock } from './AgentBlock';
 import AgentLoading from './AgentLoading';
-import {
-  useAgent,
-  useSkills,
-  useExecutionManagement,
-  useApiKeyCheck,
-  useNotifications,
-  useErrorHandler,
-  useResetAndDeselect,
-  useClipboard,
-  useFileDownload,
-  useFeedback,
-  useScrollControl,
-  useCurrentEvaluation,
-} from '@/hooks';
+import { useAgent, useSkills, useExecutionManagement, useApiKeyCheck, useNotifications, useErrorHandler, useResetAndDeselect, useClipboard, useFileDownload, useFeedback, useScrollControl, useCurrentEvaluation } from '@/hooks';
 import { toast } from 'sonner';
 
 export const AgentView: FC = () => {
@@ -54,22 +36,13 @@ export const AgentView: FC = () => {
 
   // Custom hooks
   const skills = useSkills(selectedAgent.id);
-  const {
-    saveNewData,
-    updateExec,
-    executions,
-    selectedExecutionId,
-    selectExecution,
-  } = useExecutionManagement();
+  const { saveNewData, updateExec, executions, selectedExecutionId, selectExecution } = useExecutionManagement();
   const { checkAndAlertApiKeySetting } = useApiKeyCheck();
   const { notifyTaskCompletion } = useNotifications();
   const { errorHandler } = useErrorHandler();
   const { copyToClipboard } = useClipboard();
   const { downloadFile } = useFileDownload();
-  const { currentEvaluation } = useCurrentEvaluation(
-    executions,
-    selectedExecutionId,
-  );
+  const { currentEvaluation } = useCurrentEvaluation( executions, selectedExecutionId );
 
   // Functions
   const stopHandler = () => {
@@ -81,15 +54,14 @@ export const AgentView: FC = () => {
     if (checkAndAlertApiKeySetting()) {
       return;
     }
-
-    saveNewData(
-      input,
-      model,
-      iterations,
-      firstTask,
-      selectedAgent,
-      agentMessages,
-    );
+    console.log("input::", input);
+    console.log("model::", model);
+    console.log("iterations::", iterations);
+    console.log("firstTask::", firstTask);
+    console.log("selectedAgent::", selectedAgent);
+    console.log("agentMessages::", agentMessages);
+    
+    saveNewData ( input, model, iterations, firstTask, selectedAgent, agentMessages );
     va.track('Start', {
       model: model.id,
       agent: selectedAgent.id,
@@ -106,24 +78,11 @@ export const AgentView: FC = () => {
   };
 
   const downloadHandler = () => {
-    const filename =
-      objective.length > 0
-        ? `${objective.replace(/\s/g, '_')}.txt`
-        : 'download.txt';
+    const filename = objective.length > 0 ? `${objective.replace(/\s/g, '_')}.txt` : 'download.txt';
     downloadFile(filename, getExportAgentMessage(agentBlocks));
   };
 
-  const {
-    input,
-    setInput,
-    agentMessages,
-    setAgentMessages,
-    isRunning,
-    handleInputChange,
-    handleSubmit,
-    handleCancel,
-    reset,
-  } = useAgent({
+  const { input, setInput, agentMessages, setAgentMessages, isRunning, handleInputChange, handleSubmit, handleCancel, reset, } = useAgent({
     api: '/api/agent',
     agentId: selectedAgent.id,
     modelName: model.id,
@@ -133,28 +92,19 @@ export const AgentView: FC = () => {
     onFinish: finishHandler,
     onError: errorHandler,
   });
+  
   const { clearHandler } = useResetAndDeselect(reset, selectExecution);
-  const { feedbackHandler } = useFeedback(
-    updateExec,
-    executions,
-    selectedExecutionId,
-    agentMessages,
-    setAgentMessages,
-  );
-  const { scrollToBottom } = useScrollControl(
-    messagesEndRef,
-    agentBlocks,
-    isRunning,
-  );
+  const { feedbackHandler } = useFeedback( updateExec, executions, selectedExecutionId, agentMessages, setAgentMessages );
+  const { scrollToBottom } = useScrollControl( messagesEndRef, agentBlocks, isRunning );
 
   useEffect(() => {
     if (selectedExecutionId) {
-      const selectedExecution = executions.find(
-        (exe) => exe.id === selectedExecutionId,
-      );
+      const selectedExecution = executions.find( (exe) => exe.id === selectedExecutionId );
       if (selectedExecution) {
         if (selectedExecution.messages) {
           const messages = convertToAgentMessages(selectedExecution.messages);
+          console.log("messages::", messages);
+          
           setAgentMessages(messages);
         } else {
           setAgentMessages(selectedExecution.agentMessages);
@@ -173,13 +123,9 @@ export const AgentView: FC = () => {
   useEffect(() => {
     const execution = executions.find((exe) => exe.id === selectedExecutionId);
     if (execution) {
-      const updatedExecution: Execution = {
-        ...execution,
-        agentMessages,
-      };
+      const updatedExecution: Execution = { ...execution, agentMessages };
       updateExec(updatedExecution);
     }
-
     const newGroupedMessages = groupMessages(agentMessages, isRunning);
     setAgentBlocks(newGroupedMessages);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -190,7 +136,7 @@ export const AgentView: FC = () => {
   }, [scrollToBottom]);
 
   return (
-    <div className="overflow-none relative flex-1 bg-white dark:bg-black">
+    <div className="relative flex-1 bg-white overflow-none dark:bg-black">
       {agentMessages.length === 0 ? (
         <>
           <AgentParameter
@@ -205,14 +151,11 @@ export const AgentView: FC = () => {
           />
           {selectedAgent.id !== 'babyagi' && <SkillsList skills={skills} />}
           <div className="h-[calc(100vh-600px)]">
-            <div className="flex h-full flex-col items-center justify-center gap-6 p-4">
+            <div className="flex flex-col items-center justify-center h-full gap-6 p-4">
               <ProjectTile />
               {(selectedAgent.id === 'babydeeragi' ||
                 selectedAgent.id === 'babyelfagi') && (
-                <IntroGuide
-                  onClick={(value) => setInput(value)}
-                  agent={selectedAgent.id}
-                />
+                <IntroGuide onClick={(value) => setInput(value)} agent={selectedAgent.id}/>
               )}
             </div>
           </div>
@@ -223,9 +166,7 @@ export const AgentView: FC = () => {
           {agentBlocks.map((block, index) => (
             <AgentBlock key={index} block={block} />
           ))}
-          {isRunning && (
-            <AgentLoading message={getAgentLoadingMessage(agentBlocks)} />
-          )}
+          {isRunning && ( <AgentLoading message={getAgentLoadingMessage(agentBlocks)} /> )}
           <div
             className="h-[162px] bg-white dark:bg-black"
             ref={messagesEndRef}

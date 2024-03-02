@@ -42,6 +42,7 @@ function validateEnvironmentVariables() {
 }
 
 function validateUserKey(user_key: string) {
+  console.log("user_key id", user_key);
   if (
     process.env.NEXT_PUBLIC_USE_USER_API_KEY === 'true' &&
     (user_key === undefined || user_key === null || !user_key.startsWith('sk-'))
@@ -51,6 +52,8 @@ function validateUserKey(user_key: string) {
 }
 
 function getSpecifiedSkills(agent_id: string) {
+  console.log("agent id", agent_id);
+  
   return agent_id === 'babydeeragi' ? SPECIFIED_SKILLS : [];
 }
 

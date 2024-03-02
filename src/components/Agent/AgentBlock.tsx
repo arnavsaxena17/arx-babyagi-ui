@@ -9,7 +9,7 @@ export interface AgentBlockProps {
 
 export const AgentBlock: FC<AgentBlockProps> = ({ block }) => {
   return (
-    <div className="flex w-full flex-col p-2">
+    <div className="flex flex-col w-full p-2">
       {block.style === 'label' ? (
         <LabelBlock block={block} />
       ) : (
