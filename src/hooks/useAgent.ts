@@ -34,17 +34,7 @@ export type UseAgentHelpers = {
   reset: () => void;
 };
 
-export function useAgent({
-  api = '/api/agent',
-  agentId,
-  modelName,
-  onResponse,
-  onError,
-  onFinish,
-  onSubmit,
-  onCancel,
-  verbose = false,
-}: UseAgentOptions = {}): UseAgentHelpers {
+export function useAgent({ api = '/api/agent', agentId, modelName, onResponse, onError, onFinish, onSubmit, onCancel, verbose = false, }: UseAgentOptions = {}): UseAgentHelpers {
   const abortControllerRef = useRef<AbortController | null>(null);
   const [agentMessages, setAgentMessages] = useState<AgentMessage[]>([]);
   const [input, setInput] = useState('');
@@ -62,30 +52,30 @@ export function useAgent({
   // Function to send the request
   const sendRequest = async (abortController: AbortController) => {
     const userKey = getUserApiKey();
+    console.log("userKey::",userKey);
+    
     try {
       let currentMesageType;
       const response = await fetch(api, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          input,
-          agent_id: agentId,
-          model_name: modelName,
-          language,
-          user_key: userKey,
-          verbose,
-        }),
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify({ input, agent_id: agentId, model_name: modelName, language, user_key: userKey, verbose, }),
         signal: abortController.signal,
       });
-
+      
       const reader = response.body?.getReader();
+      console.log("response::", response);
+      
+      console.log("readers::", reader);
+
       let partialMessage;
 
       if (reader) {
         while (true) {
           const { done, value } = await reader.read();
+          console.log("donedonedone:",done);
+          console.log("valuevalue:",value);
+          
 
           if (done) {
             break;
@@ -96,6 +86,8 @@ export function useAgent({
             const decodedValue = new TextDecoder().decode(value);
             // Split the decoded value into messages
             const splitMessages = decodedValue.split('\n\n');
+            console.log("splitMessages:",splitMessages);
+            
 
             // If there is a partial message and the first split message does not start with '{"message":'
             // then prepend the partial message to the first split message
@@ -116,15 +108,12 @@ export function useAgent({
 
             // Combine the split messages into a single message
             let combinedMessage = splitMessages.join('\n\n');
-
+            console.log("combinedMessage",combinedMessage);
+            
             // Parse the combined message and exclude 'ping' type messages
-            const newAgentMessages: AgentMessage[] = combinedMessage
-              .trim()
-              .split('\n\n')
-              .map(parseMessage)
-              .filter(
-                (m): m is AgentMessage => m !== null && m.type !== 'ping',
-              );
+            const newAgentMessages: AgentMessage[] = combinedMessage.trim().split('\n\n').map(parseMessage).filter((m): m is AgentMessage => m !== null && m.type !== 'ping');
+            console.log("newAgentMessages", newAgentMessages);
+            
 
             // Update the message map
             newAgentMessages.forEach((newMsg) => {
@@ -143,6 +132,8 @@ export function useAgent({
                 }
               }
             });
+            console.log("newAgentMessagesnewAgent::", newAgentMessages);
+            
 
             // Update the current message type
             if (newAgentMessages.length > 0) {
@@ -152,6 +143,8 @@ export function useAgent({
 
             // Update the agent messages state
             const updatedNewMessages = Array.from(messageMap.current.values());
+            console.log("setAgentMessagessetAgentMessages", setAgentMessages);
+            
             setAgentMessages(updatedNewMessages);
 
             // Call onResponse with the new message
@@ -204,11 +197,7 @@ export function useAgent({
   };
 
   // Handle form submission
-  const handleSubmit = async (
-    event:
-      | React.FormEvent<HTMLFormElement>
-      | React.KeyboardEvent<HTMLTextAreaElement>,
-  ) => {
+  const handleSubmit = async (event : | React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLTextAreaElement>, ) => {
     event.preventDefault();
 
     // Create a new AbortController instance for each request
@@ -259,15 +248,9 @@ export function useAgent({
     };
   }, []);
 
-  return {
-    agentMessages,
-    setAgentMessages,
-    handleCancel,
-    handleInputChange,
-    handleSubmit,
-    input,
-    setInput,
-    isRunning,
-    reset,
-  };
+  console.log("agentMessages",agentMessages);
+  console.log("input::",input);
+  console.log("isRunning",isRunning);
+  
+  return { agentMessages, setAgentMessages, handleCancel, handleInputChange, handleSubmit, input, setInput, isRunning, reset, };
 }

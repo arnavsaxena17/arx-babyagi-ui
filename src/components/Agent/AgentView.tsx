@@ -82,29 +82,35 @@ export const AgentView: FC = () => {
     downloadFile(filename, getExportAgentMessage(agentBlocks));
   };
 
-  const { input, setInput, agentMessages, setAgentMessages, isRunning, handleInputChange, handleSubmit, handleCancel, reset, } = useAgent({
-    api: '/api/agent',
-    agentId: selectedAgent.id,
-    modelName: model.id,
-    verbose: false,
-    onSubmit: startHandler,
-    onCancel: stopHandler,
-    onFinish: finishHandler,
-    onError: errorHandler,
-  });
+  const { input, setInput, agentMessages, setAgentMessages, isRunning, handleInputChange, handleSubmit, handleCancel, reset, } = useAgent({ api: '/api/agent', agentId: selectedAgent.id, modelName: model.id, verbose: false, onSubmit: startHandler, onCancel: stopHandler, onFinish: finishHandler, onError: errorHandler, });
+  console.log("input", input);
+  // console.log("setInput", setInput);
+  console.log("agentMessages", agentMessages);
+  // console.log("setAgentMessages", setAgentMessages);
+  console.log("isRunning", isRunning);
+  // console.log("handleInputChange", handleInputChange);
+  // console.log("handleSubmit", handleSubmit);
+  // console.log("handleCancel", handleCancel);
+  // console.log("reset", reset);
+  
   
   const { clearHandler } = useResetAndDeselect(reset, selectExecution);
   const { feedbackHandler } = useFeedback( updateExec, executions, selectedExecutionId, agentMessages, setAgentMessages );
   const { scrollToBottom } = useScrollControl( messagesEndRef, agentBlocks, isRunning );
 
+  console.log("selectedExecutionIdselectedExecutionId:",selectedExecutionId);
+  console.log("agentMessages:",agentMessages);
+  
+
   useEffect(() => {
     if (selectedExecutionId) {
       const selectedExecution = executions.find( (exe) => exe.id === selectedExecutionId );
+      console.log("selectedExecution::",selectedExecution);
+      
       if (selectedExecution) {
         if (selectedExecution.messages) {
           const messages = convertToAgentMessages(selectedExecution.messages);
           console.log("messages::", messages);
-          
           setAgentMessages(messages);
         } else {
           setAgentMessages(selectedExecution.agentMessages);
@@ -122,11 +128,14 @@ export const AgentView: FC = () => {
 
   useEffect(() => {
     const execution = executions.find((exe) => exe.id === selectedExecutionId);
+    console.log("execution:::", execution);
+    
     if (execution) {
       const updatedExecution: Execution = { ...execution, agentMessages };
       updateExec(updatedExecution);
     }
     const newGroupedMessages = groupMessages(agentMessages, isRunning);
+    console.log("newGroupedMessages::",newGroupedMessages);
     setAgentBlocks(newGroupedMessages);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [agentMessages, isRunning]);
@@ -153,24 +162,16 @@ export const AgentView: FC = () => {
           <div className="h-[calc(100vh-600px)]">
             <div className="flex flex-col items-center justify-center h-full gap-6 p-4">
               <ProjectTile />
-              {(selectedAgent.id === 'babydeeragi' ||
-                selectedAgent.id === 'babyelfagi') && (
-                <IntroGuide onClick={(value) => setInput(value)} agent={selectedAgent.id}/>
-              )}
+              {(selectedAgent.id === 'babydeeragi' || selectedAgent.id === 'babyelfagi') && ( <IntroGuide onClick={(value) => setInput(value)} agent={selectedAgent.id}/> )}
             </div>
           </div>
         </>
       ) : (
         <div className="max-h-full overflow-scroll">
           <AgentMessageHeader model={model} agent={selectedAgent} />
-          {agentBlocks.map((block, index) => (
-            <AgentBlock key={index} block={block} />
-          ))}
+          {agentBlocks.map((block, index) => ( <AgentBlock key={index} block={block} /> ))}
           {isRunning && ( <AgentLoading message={getAgentLoadingMessage(agentBlocks)} /> )}
-          <div
-            className="h-[162px] bg-white dark:bg-black"
-            ref={messagesEndRef}
-          />
+          <div className="h-[162px] bg-white dark:bg-black" ref={messagesEndRef} />
         </div>
       )}
       <AgentInput

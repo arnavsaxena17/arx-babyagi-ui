@@ -23,15 +23,9 @@ export const useFeedback = (
     const feedbackAgent = selectedExecution?.params.agent;
     const feedbackIterations = Number(selectedExecution?.params.iterations.id);
 
-    let lastResult = agentMessages
-      .filter((message) => message.type === 'result')
-      .pop()?.content;
-    const lastTaskList = agentMessages
-      .filter((message) => message.type === 'task-list')
-      .pop()?.content;
-    const sessionSummary = agentMessages
-      .filter((message) => message.type === 'session-summary')
-      .pop()?.content;
+    let lastResult = agentMessages.filter((message) => message.type === 'result').pop()?.content;
+    const lastTaskList = agentMessages.filter((message) => message.type === 'task-list').pop()?.content;
+    const sessionSummary = agentMessages.filter((message) => message.type === 'session-summary').pop()?.content;
     const finished = lastResult !== undefined;
     const output = sessionSummary;
 
