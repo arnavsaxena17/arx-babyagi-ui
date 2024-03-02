@@ -74,7 +74,7 @@ function Home() {
       <main
         className={`flex h-screen w-screen flex-col text-sm text-white dark:text-white`}
       >
-        <div className="flex h-full w-full">
+        <div className="flex w-full h-full">
           {showSidebar && (
             <div>
               <Sidebar onMenuClick={menuClickHandler} />

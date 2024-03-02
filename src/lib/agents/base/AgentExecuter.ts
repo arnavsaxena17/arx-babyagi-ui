@@ -39,6 +39,15 @@ export class AgentExecuter {
   }
 
   async run() {
+    
+    console.log("this.objective::", this.objective);
+    console.log("this.modelName::", this.modelName);
+    console.log("this.handlers::", this.handlers);
+    console.log("this.language::", this.language);
+    console.log("this.verbose::", this.verbose);
+    console.log("this.signal::", this.signal);
+    
+    
     this.taskList = [];
     await this.prepare();
     await this.loop();

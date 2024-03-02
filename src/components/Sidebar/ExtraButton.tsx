@@ -18,23 +18,23 @@ export const ExtraButton: FC<ExtraButtonProps> = ({ onDelete }) => {
     <div className="relative inline-block text-left">
       <PopoverPrimitive.Root>
         <PopoverPrimitive.Trigger asChild>
-          <button className="p-1 text-neutral-400 opacity-0 hover:opacity-100">
+          {/* <button className="p-1 opacity-0 text-neutral-400 hover:opacity-100">
             <DotsHorizontalIcon />
-          </button>
+          </button> */}
         </PopoverPrimitive.Trigger>
         <PopoverPrimitive.Content
           align="center"
           sideOffset={4}
-          className="z-50 w-48 rounded-lg bg-neutral-900 p-2 shadow-md"
+          className="z-50 w-48 p-2 rounded-lg shadow-md bg-neutral-900"
         >
-          <PopoverPrimitive.Arrow className="fill-current text-gray-900" />
-          <button
-            className="inline-flex h-full w-full items-center gap-2 rounded-md p-2 hover:bg-neutral-800"
+          <PopoverPrimitive.Arrow className="text-gray-900 fill-current" />
+          {/* <button
+            className="inline-flex items-center w-full h-full gap-2 p-2 rounded-md hover:bg-neutral-800"
             onClick={handleClick}
           >
-            <TrashIcon className="h-5 w-5" />
+            <TrashIcon className="w-5 h-5" />
             {translate('DELETE')}
-          </button>
+          </button> */}
         </PopoverPrimitive.Content>
       </PopoverPrimitive.Root>
     </div>

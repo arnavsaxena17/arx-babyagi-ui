@@ -11,24 +11,25 @@ export const config = {
 export default async function handler(req: NextRequest, res: NextResponse) {
   const { stream, handlers, addObserver } = AgentStream();
   const requestData = await req.json();
-  const { input, agent_id, model_name, language, verbose, user_key } =
-    requestData;
+  const { input, agent_id, model_name, language, verbose, user_key } = requestData;
+  
+  console.log("Input::", input);
+  console.log("agent_id::", agent_id);
+  console.log("model_name::", model_name);
+  console.log("language::", language);
+  console.log("verbose::", verbose);
+  console.log("user_key::", user_key);
+  
 
   validateEnvironmentVariables();
   validateUserKey(user_key);
 
   const specifiedSkills = getSpecifiedSkills(agent_id);
+  console.log("specifiedSkills",specifiedSkills);
+  
   const abortController = setupAbortController(addObserver);
-  const executer = new BabyElfAGI(
-    input,
-    model_name,
-    handlers,
-    language || 'en',
-    verbose,
-    specifiedSkills,
-    user_key,
-    abortController.signal,
-  );
+  console.log("abortController",abortController);
+  const executer = new BabyElfAGI( input, model_name, handlers, language || 'en', verbose, specifiedSkills, user_key, abortController.signal );
   executer.run();
 
   return new StreamingTextResponse(stream);
