@@ -43,7 +43,7 @@ export type ExecutionParams = {
   agent: AgentType;
 };
 
-export type AgentType = 'babyagi' | 'babybeeagi' | 'babycatagi' | 'none';
+export type AgentType = 'babyagi' | 'arxagi' | 'babybeeagi' | 'babycatagi' | 'none';
 
 export type MessageType =
   | 'objective'

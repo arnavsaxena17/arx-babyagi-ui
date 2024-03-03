@@ -168,13 +168,12 @@ export const getExportText = (messages: Message[], agentId?: string) => {
   console.log("Agent ID:", agentId);
   console.log("messages:", messages);
   
-  if (agentId === 'babydeeragi' || agentId === 'babyelfagi') {
+  if (agentId === 'babydeeragi' || agentId === 'babyelfagi' || agentId === 'arxagi') {
     // exclude task-execute & user-input messages
     messages = messages.filter(
       (message) =>
         message.type !== 'task-execute' && message.type !== 'user-input',
     );
-
     // sord by id
     messages.sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
     // if message is complete, move it to the end
@@ -183,10 +182,8 @@ export const getExportText = (messages: Message[], agentId?: string) => {
         (a.type === 'complete' ? 1 : 0) - (b.type === 'complete' ? 1 : 0),
     );
   }
-
-  const text = messages
-    .map((message) => `## ${message.icon} ${message.title}\n${message.text}`)
-    .join('\n\n');
+  
+  const text = messages.map((message) => `## ${message.icon} ${message.title}\n${message.text}`).join('\n\n');
   return text;
 };
 

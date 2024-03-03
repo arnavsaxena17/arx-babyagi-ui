@@ -162,7 +162,7 @@ export const AgentView: FC = () => {
           <div className="h-[calc(100vh-600px)]">
             <div className="flex flex-col items-center justify-center h-full gap-6 p-4">
               <ProjectTile />
-              {(selectedAgent.id === 'babydeeragi' || selectedAgent.id === 'babyelfagi') && ( <IntroGuide onClick={(value) => setInput(value)} agent={selectedAgent.id}/> )}
+              {(selectedAgent.id === 'babydeeragi' || selectedAgent.id === 'babyelfagi' || selectedAgent.id === 'arxagi') && ( <IntroGuide onClick={(value) => setInput(value)} agent={selectedAgent.id}/> )}
             </div>
           </div>
         </>

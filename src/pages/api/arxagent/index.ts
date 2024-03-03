@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { StreamingTextResponse } from 'ai';
 import { AgentStream } from '@/lib/agents/base/AgentStream';
-import { BabyElfAGI } from '@/lib/agents/babyelfagi/executer';
+// import { BabyElfAGI } from '@/lib/agents/babyelfagi/executer';
+import { ArxAGI } from '@/lib/agents/arxagi/executer';
 import { SPECIFIED_SKILLS } from '@/utils/constants';
 
 export const config = {
@@ -29,7 +30,7 @@ export default async function handler(req: NextRequest, res: NextResponse) {
   
   const abortController = setupAbortController(addObserver);
   console.log("abortController",abortController);
-  const executer = new BabyElfAGI( input, model_name, handlers, language || 'en', verbose, specifiedSkills, user_key, abortController.signal );
+  const executer = new ArxAGI( input, model_name, handlers, language || 'en', verbose, specifiedSkills, user_key, abortController.signal );
   executer.run();
 
   return new StreamingTextResponse(stream);

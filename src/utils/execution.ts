@@ -25,6 +25,8 @@ const saveExecutions = (executions: Execution[]) => {
 };
 
 export const savedExecutions = () => {
+  console.log("This is execntions key:",EXECUTIONS_KEY);
+  
   return JSON.parse(
     localStorage.getItem(EXECUTIONS_KEY) || '[]',
   ) as Execution[];

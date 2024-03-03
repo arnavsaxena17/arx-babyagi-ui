@@ -31,6 +31,7 @@ export const AgentParameter: FC<AgentParameterProps> = ({
     if (model.id !== 'gpt-4') {
       option = AGENT.filter(
         (agent) =>
+          agent.id === 'arxagi' ||
           agent.id === 'babyagi' ||
           agent.id === 'babydeeragi' ||
           agent.id === 'babyelfagi',
@@ -43,8 +44,8 @@ export const AgentParameter: FC<AgentParameterProps> = ({
   }, [model]);
 
   return (
-    <div className="mx-auto flex flex-col items-start space-y-3 p-4 pt-14 lg:w-2/3 xl:w-2/4">
-      <div className="z-20 flex w-full items-start justify-center gap-2">
+    <div className="flex flex-col items-start p-4 mx-auto space-y-3 pt-14 lg:w-2/3 xl:w-2/4">
+      <div className="z-20 flex items-start justify-center w-full gap-2">
         <Select
           label={translate('MODEL')}
           item={model}
@@ -63,7 +64,7 @@ export const AgentParameter: FC<AgentParameterProps> = ({
         />
       </div>
       {agent.id === 'babyagi' && (
-        <div className="z-10 flex w-1/2 items-start pr-1">
+        <div className="z-10 flex items-start w-1/2 pr-1">
           <Select
             label={translate('ITERATIONS')}
             item={iterations}
@@ -79,12 +80,12 @@ export const AgentParameter: FC<AgentParameterProps> = ({
       {agent.id !== 'babycatagi' &&
         agent.id !== 'babydeeragi' &&
         agent.id !== 'babyelfagi' && (
-          <div className="flex w-full flex-col">
-            <label className="mb-2 text-left text-xs text-neutral-400 dark:text-neutral-500">
+          <div className="flex flex-col w-full">
+            <label className="mb-2 text-xs text-left text-neutral-400 dark:text-neutral-500">
               {translate('FIRST_TASK')}
             </label>
             <input
-              className="w-full rounded-lg border border-neutral-200 p-3 text-neutral-600 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-white"
+              className="w-full p-3 border rounded-lg border-neutral-200 text-neutral-600 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-white"
               value={firstTask}
               onChange={(e) => setFirstTask(e.target.value)}
             ></input>

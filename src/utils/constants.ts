@@ -40,6 +40,12 @@ export const BABYBEEAGI_ITERATIONS = [
 
 export const AGENT = [
   {
+    id: 'arxagi',
+    name: 'ArxAGI',
+    icon: '🧝',
+    badge: 'BETA',
+  },
+  {
     id: 'babydeeragi',
     name: 'BabyDeerAGI',
     icon: '🦌',
@@ -70,6 +76,12 @@ export const ALL_AGENTS = [
   {
     id: 'babycatagi',
     name: 'BabyCatAGI',
+    icon: '🐱',
+    message: '🤖/🔎+📄',
+  },
+  {
+    id: 'arxagi',
+    name: 'ArxAGI',
     icon: '🐱',
     message: '🤖/🔎+📄',
   },
