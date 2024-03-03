@@ -34,7 +34,7 @@ export type UseAgentHelpers = {
   reset: () => void;
 };
 
-export function useAgent({ api = '/api/agent', agentId, modelName, onResponse, onError, onFinish, onSubmit, onCancel, verbose = false, }: UseAgentOptions = {}): UseAgentHelpers {
+export function useArxAgent({ api = '/api/arxagent', agentId, modelName, onResponse, onError, onFinish, onSubmit, onCancel, verbose = false, }: UseAgentOptions = {}): UseAgentHelpers {
   const abortControllerRef = useRef<AbortController | null>(null);
   const [agentMessages, setAgentMessages] = useState<AgentMessage[]>([]);
   const [input, setInput] = useState('');

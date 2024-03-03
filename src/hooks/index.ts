@@ -1,4 +1,5 @@
 export { useAgent } from './useAgent';
+export { useArxAgent } from './useArxAgent';
 export { useSkills } from './useSkills';
 export { useExecutionManagement } from './useExecutionManagement';
 export { useApiKeyCheck } from './useApiKeyCheck';

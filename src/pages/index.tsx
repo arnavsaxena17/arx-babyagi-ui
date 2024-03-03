@@ -1,4 +1,5 @@
 import { AgentView } from '@/components/Agent/AgentView';
+import { ArxView } from '@/components/Agent/ArxView';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -83,6 +84,7 @@ function Home() {
             </div>
           )}
           <AgentView />
+          <ArxView />
         </div>
         <div className="absolute left-2 top-2">
           <CollapsedButton
